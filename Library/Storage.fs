@@ -67,4 +67,14 @@ module ``Record array`` =
 
     let convert source target value : float option =
             (valueFrom source, valueFrom target)
-            ||> Option.map2 (fun source target -> value * source / target)    
+            ||> Option.map2 (fun source target -> value * source / target)
+
+module Csv =
+    open FSharp.Data
+    let [<Literal>] LengthFilePath = __SOURCE_DIRECTORY__ + "/Length.csv"
+    let lengthProvider = CsvProvider<LengthFilePath, HasHeaders = true>.GetSample()
+    let lengths =
+        lengthProvider.Rows
+        |> Seq.map (fun x -> 
+            { Name = x.Name; Abbreviation = x.Abbreviation; Value = x.Value })
+        |> Seq.toArray
