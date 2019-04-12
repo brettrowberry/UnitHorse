@@ -1,3 +1,5 @@
-Name, Abbreviation, Value (float)
-meter, m, 1.0
-US foot, ft, 0.3048
+Name,Abbreviation,Value (float)
+meter,m,1.0
+millimeter,mm,1e-3
+kilometer,km,1e3
+US foot,ft,0.3048
