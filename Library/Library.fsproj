@@ -5,6 +5,7 @@
   <ItemGroup>
     <Compile Include="UnitsOfMeasure.fs" />
     <Compile Include="Types.fs" />
+    <Compile Include="Length.fs" />
     <Compile Include="Length.csv" />
     <Compile Include="Storage.fs" />
     <Compile Include="Library.fs" />
