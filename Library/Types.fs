@@ -3,11 +3,11 @@ namespace Types
 type Unit = {
         Name : string
         Abbreviation : string
-        Value : float
+        Factor : float
     }
 
 // type MultinameUnit = {
 //         Names : string[]
 //         Abbreviation : string
-//         Value : float
+//         Factor : float
 //     }
