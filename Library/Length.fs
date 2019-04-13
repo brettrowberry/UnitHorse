@@ -1,5 +1,10 @@
 module Length
-open Types
+
+type LengthMetadata = {
+        Name : string
+        Abbreviation : string
+        Factor : float
+    }
 
 type Length = Meter | Millimeter | Kilometer | USFoot
 
@@ -18,31 +23,36 @@ let convert source target values =
 convert Meter USFoot [| 1.; 2.; 3. |]
 
 open Microsoft.FSharp.Reflection
+// someone might want to know what units are available
 let lengths =
     FSharpType.GetUnionCases typeof<Length>
     |> Array.map (fun c -> FSharpValue.MakeUnion(c, [||]) :?> Length |> getUnit)
 
-let tryGetUnitFactor s = 
+let tryGetUnitFactor nameOrAbbrev = 
     lengths
-    |> Array.tryFind (fun l -> l.Name = s)
+    |> Array.tryFind (fun l -> l.Name = nameOrAbbrev)
+    // |> Array.tryFind (fun l -> l.Name = nameOrAbbrev || l.Abbreviation = nameOrAbbrev)
     |> Option.map (fun l -> l.Factor)
 
 type ConversionResult =
-| UnitOrAbbrevNotFound of unitName : string
-| UnitsOrAbbrevsNotFound of unitName : string * otherUnitName : string
+| NameNotFound of unitName : string
+| NamesNotFound of unitName : string * otherUnitName : string
 | Success of float []
 //consider closest match
 
 let tryConvert source target (values : float[]) =
     match (tryGetUnitFactor source, tryGetUnitFactor target)  with
-    | None, Some _ -> UnitOrAbbrevNotFound source
-    | Some _, None -> UnitOrAbbrevNotFound target
-    | None, None -> UnitsOrAbbrevsNotFound (source, target)
+    | None, Some _ -> NameNotFound source
+    | Some _, None -> NameNotFound target
+    | None, None -> NamesNotFound (source, target)
     | Some s, Some t -> 
         let calc value = value * s / t
         let results = values |> Array.map calc
         Success results
 
-tryConvert "meter" "US foot" [| 1.; 2.; 3. |]
-tryConvert "metre" "US foot" [| 1.; 2.; 3. |]
-tryConvert "meter" "US feet" [| 1.; 2.; 3. |]
+let values = [| 1.; 2.; 3. |]
+tryConvert "meter" "US foot" values
+tryConvert "metre" "US foot" values
+tryConvert "meter" "US feet" values
+
+tryConvert "m" "US foot" values
