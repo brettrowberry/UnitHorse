@@ -32,31 +32,3 @@ tryConvert "mm" "m" 1000.
 tryConvert "ft" "km" 5280.
 
 lengths
-
-///
-/// //best overall
-module DU_Record =
-    open Types
-    open Microsoft.FSharp.Reflection
-
-    let private get = function
-    | Meter -> { Name = "meter"; Abbreviation = "m"; Factor = 1.0 }
-    | Millimeter -> { Name = "millimeter"; Abbreviation = "mm"; Factor = 1e-3 }
-    | Kilometer -> { Name = "kilometer"; Abbreviation = "km"; Factor = 1e3 }
-    | USFoot -> { Name = "US foot"; Abbreviation = "ft"; Factor = 0.3048 }
-
-    let lengths =
-        FSharpType.GetUnionCases typeof<Length>
-        |> Array.map (fun c -> FSharpValue.MakeUnion(c, [||]) :?> Length |> get)
-    
-    let convert source target value : float =
-        (get source, get target)
-        ||> (fun source target -> value * source.Factor / target.Factor)
-
-    let private tryGetFactor s = lengths |> Array.tryFind (fun l -> l.Name = s) |> Option.map (fun l -> l.Factor)
-
-    let tryConvert = tryConvertTemplate tryGetFactor
-
-    let tryConvert source target value : float option =
-    (tryGetFactor source, tryGetFactor target)
-    ||> Option.map2 (fun source target -> value * source / target)
