@@ -20,7 +20,7 @@ module Lets =
     let kilometer = { Name = "kilometer"; Abbreviation = "km"; Factor = 1e3 }
     let ``US foot`` = { Name = "US foot"; Abbreviation = "ft"; Factor = 0.3048 }
 
-let lengths = typeof<Lets.Dummy>.DeclaringType.GetProperties() |> Array.map(fun p -> p.GetValue(null, null) :?> Unit)
+let lengths = typeof<Lets.Dummy>.DeclaringType.GetProperties() |> Array.map(fun p -> p.GetValue(null, null) :?> LengthMetadata)
 let tryConvert = //
 
 // maybe we can define what a successful implementation looks like
@@ -57,7 +57,7 @@ module ``DU -> Record`` =
     let tryGetFactor s = lengths |> Array.tryFind (fun l -> l.Name = s) |> Option.map (fun l -> l.Factor)
 
 type ILengthConverter = {
-    Lengths : Unit[]
+    Lengths : LengthMetadata[]
     Convert: Length -> Length -> float -> float
     TryConvert: string -> string -> float -> float option
 }
@@ -70,7 +70,7 @@ let duLengthConverter : ILengthConverter = {
 
 // best as a web service
 module ``Record array`` =
-    let lengths : Unit[] = [|
+    let lengths : LengthMetadata[] = [|
         { Name = "meter"; Abbreviation = "m"; Factor = 1.0 }
         { Name = "millimeter"; Abbreviation = "mm"; Factor = 1e-3 }
         { Name = "kilometer"; Abbreviation = "km"; Factor = 1e3 }
@@ -83,7 +83,7 @@ module ``Record array`` =
     | Kilometer -> lengths.[2].Factor
     | USFoot -> lengths.[3].Factor
 
-    let predicates : (Unit -> string -> bool) list = 
+    let predicates : (LengthMetadata -> string -> bool) list = 
         [
             fun u x -> x = u.Name
             fun u x -> x = u.Abbreviation
@@ -109,7 +109,7 @@ let recordArrayLengthConverter : ILengthConverter = {
 module Csv =
     let lengths = Storage.Length.lengths
 
-    let predicates : (Unit -> string -> bool) list = 
+    let predicates : (LengthMetadata -> string -> bool) list = 
         [
             fun u x -> x = u.Name
             fun u x -> x = u.Abbreviation

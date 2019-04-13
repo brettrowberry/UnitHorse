@@ -1,6 +1,6 @@
 namespace Types
 
-type Unit = {
+type LengthMetadata = {
         Name : string
         Abbreviation : string
         Factor : float
