@@ -28,15 +28,15 @@ let tryGetUnitFactor s =
     |> Option.map (fun l -> l.Factor)
 
 type ConversionResult =
-| UnitOrAbbrevNotFound of string
-| UnitsOrAbbrevsNotFound of string * string
+| UnitOrAbbrevNotFound of unitName : string
+| UnitsOrAbbrevsNotFound of unitName : string * otherUnitName : string
 | Success of float []
 //consider closest match
 
 let tryConvert source target (values : float[]) =
     match (tryGetUnitFactor source, tryGetUnitFactor target)  with
-    | Some _, None -> UnitOrAbbrevNotFound source
     | None, Some _ -> UnitOrAbbrevNotFound source
+    | Some _, None -> UnitOrAbbrevNotFound target
     | None, None -> UnitsOrAbbrevsNotFound (source, target)
     | Some s, Some t -> 
         let calc value = value * s / t
@@ -44,3 +44,5 @@ let tryConvert source target (values : float[]) =
         Success results
 
 tryConvert "meter" "US foot" [| 1.; 2.; 3. |]
+tryConvert "metre" "US foot" [| 1.; 2.; 3. |]
+tryConvert "meter" "US feet" [| 1.; 2.; 3. |]
