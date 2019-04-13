@@ -1,3 +1,5 @@
+// Live coding : Dynamic typing :: Live uncommenting : Static typing
+
 module UnitsOfMeasure
 // https://fsharpforfunandprofit.com/posts/correctness-type-checking/
 
@@ -6,11 +8,10 @@ type [<Measure>] mm =
    static member ToMeters(millimeters : float<mm>) : float<m> = 
       millimeters * 1e-3<m/mm>
 
-let meters = 1.0<m>
 let millimeters = 1e3<mm>
 let millimetersInMeters = mm.ToMeters(millimeters)
 
-meters + millimeters // can't mix and match!
+millimeters + millimetersInMeters // can't mix and match!
 
 // A B, n = 2
 // A->B
