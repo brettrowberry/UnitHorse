@@ -9,5 +9,5 @@ module Length =
         let lengthProvider = CsvProvider<LengthFilePath, HasHeaders = true>.GetSample()
         lengthProvider.Rows
         |> Seq.map (fun x -> 
-            { Name = x.Name; Abbreviation = x.Abbreviation; Value = x.Value })
+            { Name = x.Name; Abbreviation = x.Abbreviation; Factor = x.Value })
         |> Seq.toArray  
