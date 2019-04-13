@@ -10,8 +10,8 @@ type TemperatureMetadata = {
 type Temp = F | K
 
 let getUnit = function
-| F -> { Name = "Fah"; Abbreviation = "F"; Zero = 459.67; Scale = 5./9. }
-| K -> { Name = "Kel"; Abbreviation = "K"; Zero = 0.; Scale = 1. } 
+| F -> { Name = "Fahrenheit"; Abbreviation = "F"; Zero = 459.67; Scale = 5./9. }
+| K -> { Name = "Kelvin"; Abbreviation = "K"; Zero = 0.; Scale = 1. } 
 
 let convert source target value =
     let s = getUnit source
