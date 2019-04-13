@@ -6,7 +6,7 @@ type LengthMetadata = {
         Factor : float
     }
 
-// type MultinameUnit = {
+// type MultinameLengthMetadata = {
 //         Names : string[]
 //         Abbreviation : string
 //         Factor : float
