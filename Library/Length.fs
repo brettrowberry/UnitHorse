@@ -4,7 +4,7 @@ type LengthMetadata = {
         Name : string
         Abbreviation : string
         Factor : float
-    }
+    } 
 
 type Length = Meter | Millimeter | Kilometer | USFoot
 
@@ -30,15 +30,14 @@ let lengths =
 
 let tryGetUnitFactor nameOrAbbrev = 
     lengths
-    |> Array.tryFind (fun l -> l.Name = nameOrAbbrev)
-    // |> Array.tryFind (fun l -> l.Name = nameOrAbbrev || l.Abbreviation = nameOrAbbrev)
+    |> Array.tryFind (fun l -> l.Name = nameOrAbbrev || l.Abbreviation = nameOrAbbrev)
     |> Option.map (fun l -> l.Factor)
 
 type ConversionResult =
 | NameNotFound of unitName : string
 | NamesNotFound of unitName : string * otherUnitName : string
 | Success of float []
-//consider closest match
+// //consider closest match
 
 let tryConvert source target (values : float[]) =
     match (tryGetUnitFactor source, tryGetUnitFactor target)  with
