@@ -25,8 +25,10 @@ convert Meter USFoot [| 1.; 2.; 3. |]
 open Microsoft.FSharp.Reflection
 // someone might want to know what units are available
 let lengths =
-    FSharpType.GetUnionCases typeof<Length>
-    |> Array.map (fun c -> FSharpValue.MakeUnion(c, [||]) :?> Length |> getUnit)
+    // FSharpType.GetUnionCases typeof<Length>
+    // |> Array.map (fun c -> FSharpValue.MakeUnion(c, [||]) :?> Length |> getUnit)
+
+    [| Meter; Millimeter; Kilometer; USFoot |] |> Array.map getUnit //clever alternative that doesn't need reflection
 
 let tryGetUnitFactor nameOrAbbrev = 
     lengths
